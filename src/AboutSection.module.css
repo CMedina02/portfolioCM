@@ -1,0 +1,18 @@
+.about { max-width: 80rem; margin: 0 auto; padding: clamp(3.5rem, 8vw, 7rem) 0 clamp(4rem, 8vw, 7rem); border-top: 1px solid var(--line); scroll-margin-top: 1.5rem; }
+.sectionMeta { display: flex; justify-content: space-between; gap: .75rem; margin-bottom: clamp(2rem, 5vw, 3.6rem); color: var(--muted); font: .58rem var(--mono); letter-spacing: .08em; }
+.aboutGrid { display: grid; gap: 2.5rem; align-items: center; }
+.aboutCopy { min-width: 0; }
+.eyebrow { margin: 0 0 1rem; color: var(--forest); font: 600 .62rem var(--mono); letter-spacing: .1em; }
+.aboutCopy h2 { margin: 0; color: var(--forest); font: 500 clamp(2.25rem, 8vw, 4.3rem)/1.04 var(--serif); letter-spacing: -.04em; }
+.aboutCopy h2 em { color: var(--gold-dark); font-weight: 400; }
+.aboutCopy > p:not(.eyebrow) { max-width: 34rem; margin: 1.3rem 0 0; color: var(--muted); font-size: clamp(.94rem, 2.4vw, 1.02rem); line-height: 1.8; }
+.focusLine { display: flex; align-items: flex-start; gap: .65rem; margin-top: 1.7rem; color: var(--forest); font: .66rem/1.6 var(--mono); }
+.focusLine span { color: var(--gold-dark); }
+
+@media (min-width: 760px) {
+  .aboutGrid { grid-template-columns: minmax(0, .92fr) minmax(21rem, 1.08fr); gap: clamp(2rem, 5vw, 5rem); }
+}
+
+@media (min-width: 1200px) {
+  .aboutGrid { grid-template-columns: minmax(0, 1fr) minmax(30rem, 1.1fr); }
+}
