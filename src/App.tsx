@@ -1,5 +1,9 @@
 import { useState } from 'react'
 import AboutSection from './AboutSection'
+import ContactSection from './ContactSection'
+import CurrentlySection from './CurrentlySection'
+import OtherProjectsSection from './OtherProjectsSection'
+import PortfolioFooter from './PortfolioFooter'
 import ProjectsSection from './ProjectsSection'
 import SkillsSection from './SkillsSection'
 import styles from './App.module.css'
@@ -32,6 +36,15 @@ function App() {
           <a className={styles.navLink} href="#projects">
             <span className={styles.navNumber}>04</span> Proyectos
           </a>
+          <a className={styles.navLink} href="#other-projects">
+            <span className={styles.navNumber}>05</span> Otros proyectos
+          </a>
+          <a className={styles.navLink} href="#currently">
+            <span className={styles.navNumber}>06</span> Actualmente
+          </a>
+          <a className={styles.navLink} href="#contact">
+            <span className={styles.navNumber}>07</span> Contacto
+          </a>
           <a className={styles.navLink} href="https://github.com/CMedina02" target="_blank" rel="noreferrer">
             <span className={styles.navNumber}>↗</span> GitHub
           </a>
@@ -62,6 +75,9 @@ function App() {
             <a href="#about" onClick={closeMenu}>Sobre mí <span>02</span></a>
             <a href="#skills" onClick={closeMenu}>Tecnologías <span>03</span></a>
             <a href="#projects" onClick={closeMenu}>Proyectos <span>04</span></a>
+            <a href="#other-projects" onClick={closeMenu}>Otros proyectos <span>05</span></a>
+            <a href="#currently" onClick={closeMenu}>Actualmente <span>06</span></a>
+            <a href="#contact" onClick={closeMenu}>Contacto <span>07</span></a>
             <a href="https://github.com/CMedina02" target="_blank" rel="noreferrer" onClick={closeMenu}>GitHub <span>↗</span></a>
           </nav>
         </header>
@@ -117,11 +133,10 @@ function App() {
         <AboutSection />
         <SkillsSection />
         <ProjectsSection />
-
-        <footer className={styles.footer}>
-          <span>CRISTIAN MEDINA <i>·</i> SOFTWARE DEVELOPER</span>
-          <span>IVORY &amp; FOREST <i>·</i> 2026</span>
-        </footer>
+        <OtherProjectsSection />
+        <CurrentlySection />
+        <ContactSection />
+        <PortfolioFooter />
       </main>
     </div>
   )
