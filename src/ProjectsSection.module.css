@@ -1,0 +1,56 @@
+.projects { max-width: 80rem; margin: 0 auto; padding: clamp(3.5rem, 8vw, 7rem) 0 clamp(4rem, 8vw, 7rem); border-top: 1px solid var(--line); scroll-margin-top: 1.5rem; }
+.sectionMeta { display: flex; justify-content: space-between; gap: .75rem; margin-bottom: clamp(2rem, 5vw, 3.6rem); color: var(--muted); font: .58rem var(--mono); letter-spacing: .08em; }
+.sectionHeader { margin-bottom: clamp(2rem, 5vw, 3rem); }
+.eyebrow { margin: 0 0 1rem; color: var(--forest); font: 600 .62rem var(--mono); letter-spacing: .1em; }
+.sectionHeader h2 { margin: 0; color: var(--forest); font: 500 clamp(2.25rem, 8vw, 4.3rem)/1.04 var(--serif); letter-spacing: -.04em; }
+.sectionHeader h2 em { color: var(--gold-dark); font-weight: 400; }
+.intro { max-width: 34rem; margin: 1rem 0 0; color: var(--muted); font-size: clamp(.94rem, 2.4vw, 1.02rem); line-height: 1.7; }
+.projectCard { min-width: 0; border: 1px solid var(--line); background: rgb(255 255 255 / 18%); }
+.featuredCard { display: grid; margin-bottom: 1rem; }
+.projectMedia { position: relative; min-width: 0; min-height: 12.5rem; display: grid; place-items: center; overflow: hidden; aspect-ratio: 16 / 9; color: var(--forest); background: #e7e5dc; border-bottom: 1px solid var(--line); }
+.projectMedia::after { position: absolute; inset: .65rem; content: ''; border: 1px solid rgb(36 71 57 / 18%); pointer-events: none; }
+.featuredCard .projectMedia { min-height: 16rem; color: var(--ivory); background: var(--forest); border-bottom: 0; }
+.featuredCard .projectMedia::after { border-color: rgb(242 240 233 / 25%); }
+.mediaIndex { position: absolute; top: 1rem; left: 1.1rem; z-index: 1; font: .65rem var(--mono); letter-spacing: .08em; }
+.mediaMessage { position: relative; z-index: 1; padding: .8rem; color: inherit; text-align: center; font: 500 clamp(.66rem, 1.2vw, .82rem)/1.7 var(--mono); letter-spacing: .1em; }
+.mediaMessage::after { display: block; width: 2rem; height: 1px; margin: .65rem auto 0; content: ''; background: var(--gold); }
+.mediaCaption { position: absolute; right: 1.1rem; bottom: 1rem; z-index: 1; font: .49rem var(--mono); letter-spacing: .07em; }
+.projectContent { min-width: 0; padding: 1.15rem; }
+.featuredCard .projectContent { padding: clamp(1.25rem, 3vw, 2.2rem); }
+.projectMeta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem; color: var(--muted); font: .52rem/1.5 var(--mono); letter-spacing: .07em; }
+.projectMeta span:last-child:not(:first-child) { color: var(--gold-dark); }
+.projectContent h3 { margin: .85rem 0 0; color: var(--forest); font: 500 clamp(1.25rem, 3.5vw, 1.7rem)/1.15 var(--serif); letter-spacing: -.02em; overflow-wrap: anywhere; }
+.featuredCard .projectContent h3 { font-size: clamp(1.8rem, 4.5vw, 2.8rem); }
+.projectDescription { margin: .75rem 0 0; color: var(--muted); font-size: .85rem; line-height: 1.7; }
+.featuredCard .projectDescription { max-width: 38rem; font-size: .94rem; }
+.technologyList { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1rem 0 0; padding: 0; list-style: none; }
+.technologyList li { max-width: 100%; padding: .35rem .5rem; color: var(--forest); border: 1px solid var(--line); font: .58rem/1.2 var(--mono); overflow-wrap: anywhere; }
+.featuredCard .technologyList li { border-color: #c9cabe; }
+.repositoryLink { width: fit-content; min-height: 44px; display: inline-flex; align-items: center; gap: 1rem; margin-top: 1.2rem; padding: .45rem .1rem; color: var(--forest); border-bottom: 1px solid var(--gold); text-decoration: none; font-size: .76rem; font-weight: 600; }
+.repositoryLink span:last-child { color: var(--gold-dark); font-size: 1rem; transition: transform .18s ease; }
+.repositoryLink:hover span:last-child { transform: translate(2px, -2px); }
+.repositoryLink:focus-visible { outline: 2px solid var(--gold-dark); outline-offset: 4px; }
+.projectGrid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+.projectGrid .projectCard { display: flex; flex-direction: column; }
+.projectGrid .projectMedia { min-height: 10rem; }
+.projectGrid .projectContent { display: flex; flex: 1; flex-direction: column; align-items: flex-start; }
+.projectGrid .technologyList { margin-top: auto; padding-top: 1rem; }
+
+@media (min-width: 640px) {
+  .projectContent { padding: 1.35rem; }
+  .projectGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .projectGrid .projectMedia { min-height: 11rem; }
+}
+
+@media (min-width: 980px) {
+  .featuredCard { grid-template-columns: minmax(17rem, .92fr) minmax(0, 1.08fr); align-items: stretch; }
+  .featuredCard .projectMedia { min-height: 25rem; aspect-ratio: auto; }
+}
+
+@media (min-width: 1280px) {
+  .projectGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .repositoryLink span:last-child { transition: none; }
+}

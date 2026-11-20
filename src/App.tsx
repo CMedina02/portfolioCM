@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import AboutSection from './AboutSection'
+import ProjectsSection from './ProjectsSection'
 import SkillsSection from './SkillsSection'
 import styles from './App.module.css'
 
@@ -27,6 +28,9 @@ function App() {
           </a>
           <a className={styles.navLink} href="#skills">
             <span className={styles.navNumber}>03</span> Tecnologías
+          </a>
+          <a className={styles.navLink} href="#projects">
+            <span className={styles.navNumber}>04</span> Proyectos
           </a>
           <a className={styles.navLink} href="https://github.com/CMedina02" target="_blank" rel="noreferrer">
             <span className={styles.navNumber}>↗</span> GitHub
@@ -57,6 +61,7 @@ function App() {
             <a href="#home" onClick={closeMenu}>Inicio <span>01</span></a>
             <a href="#about" onClick={closeMenu}>Sobre mí <span>02</span></a>
             <a href="#skills" onClick={closeMenu}>Tecnologías <span>03</span></a>
+            <a href="#projects" onClick={closeMenu}>Proyectos <span>04</span></a>
             <a href="https://github.com/CMedina02" target="_blank" rel="noreferrer" onClick={closeMenu}>GitHub <span>↗</span></a>
           </nav>
         </header>
@@ -111,6 +116,7 @@ function App() {
 
         <AboutSection />
         <SkillsSection />
+        <ProjectsSection />
 
         <footer className={styles.footer}>
           <span>CRISTIAN MEDINA <i>·</i> SOFTWARE DEVELOPER</span>
