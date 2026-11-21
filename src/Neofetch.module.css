@@ -28,3 +28,27 @@
   .profile { width: 100%; font-size: .7rem; }
   .profileRow { grid-template-columns: 4.6rem minmax(0, 1fr); }
 }
+
+.commands {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  padding: .55rem 1rem;
+  border-bottom: 1px solid #344a3d;
+}
+.commands button {
+  min-height: 44px;
+  padding: .4rem .65rem;
+  border: 1px solid transparent;
+  border-radius: .45rem;
+  color: var(--ivory);
+  background: transparent;
+  font: .75rem var(--mono);
+  cursor: pointer;
+}
+.commands button:hover { background: #20342a; }
+.commands button[aria-pressed='true'] { border-color: #688071; color: var(--gold); }
+.terminal :focus-visible { outline-color: var(--gold); }
+.output { font: .76rem/1.6 var(--mono); }
+.output p { margin: 0; }
+.output a { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; color: var(--gold); }

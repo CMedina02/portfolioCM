@@ -9,11 +9,18 @@ import ProjectsSection from './ProjectsSection'
 import SkillsSection from './SkillsSection'
 import styles from './App.module.css'
 
+function scrollProgress(position: number, start: number, end: number) {
+  const progress = Math.max(0, Math.min(1, (start - position) / (start - end)))
+  return progress * progress * (3 - 2 * progress)
+}
+
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
   const menuButtonRef = useRef<HTMLButtonElement>(null)
   const headerRef = useRef<HTMLElement>(null)
+  const missionRef = useRef<HTMLDivElement>(null)
+  const galleryRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!menuOpen) return
@@ -36,6 +43,9 @@ function App() {
 
   useEffect(() => {
     const sections = Array.from(document.querySelectorAll<HTMLElement>('main section[id]'))
+    const mission = missionRef.current
+    const gallery = galleryRef.current
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
     let frame = 0
     let previousSection = ''
     const update = () => {
@@ -47,6 +57,15 @@ function App() {
         ? sections.at(-1)
         : sections.filter(section => section.getBoundingClientRect().top <= marker).at(-1)
       const id = current?.id ?? 'home'
+      if (!reducedMotion.matches && mission && gallery) {
+        const height = window.innerHeight
+        const missionBounds = mission.getBoundingClientRect()
+        const center = missionBounds.top + missionBounds.height / 2
+        const departure = scrollProgress(center, height * .52, height * .12)
+        const arrival = scrollProgress(gallery.getBoundingClientRect().top, height * .96, height * .48)
+        mission.style.setProperty('--departure', String(departure))
+        gallery.style.setProperty('--arrival', String(arrival))
+      }
       if (id !== previousSection) {
         previousSection = id
         setActiveSection(id)
@@ -59,10 +78,12 @@ function App() {
     resize.observe(document.body)
     window.addEventListener('scroll', schedule, { passive: true })
     window.addEventListener('resize', schedule)
+    reducedMotion.addEventListener('change', schedule)
     update()
     return () => {
       window.removeEventListener('scroll', schedule)
       window.removeEventListener('resize', schedule)
+      reducedMotion.removeEventListener('change', schedule)
       resize.disconnect()
       cancelAnimationFrame(frame)
     }
@@ -137,10 +158,12 @@ function App() {
             </div>
           </div>
 
-          <MissionPreview />
+          <div className={styles.missionFrame} ref={missionRef}>
+            <MissionPreview />
+          </div>
         </section>
 
-        <div data-reveal><ProjectsSection /></div>
+        <div data-reveal className={styles.galleryArrival} ref={galleryRef}><ProjectsSection /></div>
         <div data-reveal><OtherProjectsSection /></div>
         <div data-reveal><AboutSection /></div>
         <div data-reveal><SkillsSection /></div>

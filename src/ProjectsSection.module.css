@@ -125,7 +125,7 @@
     gap: .5rem 3rem;
   }
   .featuredCard .projectMeta { grid-column: 1 / -1; }
-  .featuredCard h3 { grid-row: span 3; }
+  .featuredCard h3 { grid-row: span 4; }
   .featuredCard .repositoryLink { grid-column: 2; }
   .projectGrid { grid-template-columns: 1.15fr 1fr; column-gap: clamp(2rem, 5vw, 5rem); }
   .projectGrid article:nth-child(2) { margin-top: 5rem; }
@@ -195,3 +195,33 @@
   .switcher button, .archiveList button { transition: color .22s, background-color .22s, padding .22s; }
   @keyframes changeProject { from { opacity: .45; transform: translateY(.75rem); } }
 }
+
+.routeCapture { margin: 0; min-width: 0; }
+.routeCapture > a {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  border-radius: .85rem;
+  background: #141414;
+}
+.routeCapture img { display: block; width: 100%; height: auto; }
+.routeCapture a > span {
+  position: absolute;
+  right: .55rem;
+  bottom: .55rem;
+  padding: .5rem .75rem;
+  border-radius: 1.5rem;
+  background: var(--ivory);
+  color: var(--forest);
+  font-size: .76rem;
+  font-weight: 600;
+}
+.routeCapture a:hover > span { background: var(--gold); }
+.routeCapture figcaption { margin-top: .6rem; color: var(--muted); font: .75rem/1.5 var(--mono); }
+.projectNotes { margin-top: 1rem; }
+.projectNotes summary { color: var(--forest); font-weight: 600; cursor: pointer; }
+.projectNotes p { max-width: 57ch; color: var(--muted); line-height: 1.65; }
+@media (min-width: 760px) {
+  .featuredCard .projectNotes { grid-column: 2; }
+}
+.previewPane .projectNotes { margin-top: 1rem; }

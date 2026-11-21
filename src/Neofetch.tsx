@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import styles from './Neofetch.module.css'
 
 const profile = [
@@ -9,14 +10,26 @@ const profile = [
   ['', 'Maintainable applications'],
 ]
 
+const commands = ['perfil', 'stack', 'proyectos'] as const
+type Command = typeof commands[number]
+
 function Neofetch() {
+  const [command, setCommand] = useState<Command>('perfil')
   return (
     <figure className={styles.terminal} aria-labelledby="neofetch-title">
       <figcaption className={styles.terminalBar} id="neofetch-title">
-        <span><i aria-hidden="true" /> profile — neofetch</span>
+        <span><i aria-hidden="true" /> cristian@portfolio — neofetch</span>
         <span>● ● ●</span>
       </figcaption>
-      <div className={styles.terminalBody}>
+      <div className={styles.commands} role="group" aria-label="Comandos del perfil">
+        {commands.map(option => (
+          <button key={option} type="button" aria-pressed={command === option}
+            aria-controls="neofetch-output" onClick={() => setCommand(option)}>
+            {option}
+          </button>
+        ))}
+      </div>
+      <div className={styles.terminalBody} id="neofetch-output" aria-live="polite">
         <pre className={styles.tux} aria-hidden="true">{`       .--.
       |o_o |
       |:_/ |
@@ -24,7 +37,7 @@ function Neofetch() {
     (|     | )
    /'\\_   _/\\
    \\___)=(___/`}</pre>
-        <dl className={styles.profile}>
+        {command === 'perfil' ? <dl className={styles.profile}>
           {profile.map(([label, value], index) => (
             <div className={styles.profileRow} key={`${label}-${value}`}>
               {label && <dt>{label}</dt>}
@@ -32,9 +45,18 @@ function Neofetch() {
               {index === 0 && <span className={styles.rule} aria-hidden="true" />}
             </div>
           ))}
-        </dl>
+        </dl> : command === 'stack' ? (
+          <div className={styles.output}>
+            <p>APIs con FastAPI y Node.js. Interfaces con React y TypeScript. Datos en PostgreSQL y SQLite.</p>
+            <a href="#skills">Ver tecnologías <span aria-hidden="true">→</span></a>
+          </div>
+        ) : (
+          <div className={styles.output}>
+            <p>MAPTE, KanbanProject y Pizzería Paco 2.0.</p>
+            <a href="#projects">Explorar proyectos <span aria-hidden="true">→</span></a>
+          </div>
+        )}
       </div>
-      <div className={styles.terminalFoot}><span>LINUX-INSPIRED PROFILE</span><span>INFORMATIVE · NOT INTERACTIVE</span></div>
     </figure>
   )
 }

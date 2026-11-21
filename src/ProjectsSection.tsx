@@ -1,16 +1,23 @@
 import { useState } from 'react'
 import { projects, type Project } from './data/projects'
+import mapteRoute from './assets/mapte-route.webp'
 import styles from './ProjectsSection.module.css'
 
 function ProjectMedia({ project }: { project: Project }) {
-  const visual = project.id === 'mapte' ? (
-    <svg className={styles.mapArtwork} viewBox="0 0 560 300" aria-hidden="true">
-      <path d="M24 68c54-44 74 12 123-11s81-41 128-10 88 31 126 1 79-23 135 11M0 122c56-40 86 8 139-13s88-34 131-6 83 30 121 2 96-20 169 6M20 188c52-38 85 6 137-16s88-31 131-3 79 26 118 0 93-15 142 10M16 244c60-30 86 8 140-13s83-27 126-2 79 22 122 0 91-13 145 8" />
-      <path className={styles.routeLine} d="M92 217c56-31 58-100 134-91s72 89 145 61 55-95 112-92" />
-      <circle cx="92" cy="217" r="6" /><circle cx="371" cy="187" r="6" /><circle cx="483" cy="95" r="6" />
-      <circle className={styles.mapHalo} cx="371" cy="187" r="18" />
-    </svg>
-  ) : project.id === 'kanbanproject' ? (
+  if (project.id === 'mapte') {
+    return (
+      <figure className={styles.routeCapture}>
+        <a href={mapteRoute} target="_blank" rel="noreferrer">
+          <img src={mapteRoute} width={1867} height={961} loading="lazy" decoding="async"
+            alt="MAPTE muestra una ruta sobre el terreno de Marte con paradas, tiempo estimado y oxígeno restante." />
+          <span>Ampliar captura <span aria-hidden="true">↗</span></span>
+        </a>
+        <figcaption>Captura de MAPTE · Ruta simulada en Marte</figcaption>
+      </figure>
+    )
+  }
+
+  const visual = project.id === 'kanbanproject' ? (
     <div className={styles.boardArtwork} aria-hidden="true">
       {['BACKLOG', 'IN PROGRESS', 'DONE'].map((column, index) => (
         <div className={styles.boardColumn} key={column}><span>{column}</span><b>{['··', '↗', '✓'][index]}</b>
@@ -52,6 +59,12 @@ function ProjectCard({ project }: { project: Project }) {
         {project.context && <div className={styles.projectMeta}>{project.context}</div>}
         <h3 id={`project-${project.id}`}>{project.name}</h3>
         <p className={styles.projectDescription}>{project.description}</p>
+        {project.id === 'mapte' && (
+          <details className={styles.projectNotes}>
+            <summary>Cómo se evalúa una ruta</summary>
+            <p>El visor muestra el terreno y las paradas. El planificador toma en cuenta el oxígeno, la reserva para el regreso y la pendiente máxima. En cada parada se puede consultar el oxígeno restante y evaluar si conviene continuar o volver a la base.</p>
+          </details>
+        )}
         <ul className={styles.technologyList} aria-label={`Tecnologías de ${project.name}`}>
           {project.technologies.map((technology) => (
             <li key={`${project.id}-${technology}`}>{technology}</li>

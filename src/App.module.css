@@ -107,6 +107,35 @@
 .hero .primaryLink:hover { background: var(--gold); }
 .hero a:focus-visible { outline-color: var(--gold); }
 .hero h1 em { display: inline-block; margin-left: .32em; }
+.missionFrame { min-width: 0; }
+
+.galleryArrival {
+  isolation: isolate;
+  margin-top: -1.5rem;
+}
+
+.galleryArrival::before {
+  content: '';
+  position: absolute;
+  inset: 0 calc(-1 * min(2vw, 1.5rem)) 0;
+  z-index: -1;
+  border-radius: clamp(1rem, 4vw, 3rem) clamp(1rem, 4vw, 3rem) 0 0;
+  background: var(--ivory);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .missionFrame:not(:focus-within) > figure {
+    transform: translateY(calc(var(--departure, 0) * clamp(1.5rem, 7vw, 6rem)))
+      scale(calc(1 - var(--departure, 0) * .25));
+  }
+
+  .galleryArrival::before {
+    transform-origin: center top;
+    transform: scaleX(calc(.88 + var(--arrival, 0) * .12));
+  }
+}
+
 .main [data-reveal] { position: relative; }
 .main [data-reveal] > section { scroll-margin-top: .75rem; }
 .main [data-reveal] > section[id='contact'] { border-radius: 1.25rem; }
@@ -142,7 +171,7 @@
 
 /* The divider opens before the heading; cards settle as they reach reading height. */
 .main [data-reveal] > section { position: relative; border-top: 0; }
-.main [data-reveal] > section:not([id='contact'])::before {
+.main [data-reveal] > section:not([id='contact'], [id='projects'])::before {
   content: '';
   position: absolute;
   inset: 0 0 auto;
@@ -177,4 +206,25 @@
     .main [data-project-card][data-in-view] { animation: settleCard .55s ease-out; }
   }
   .main [data-project-card]:focus-within { animation: none; }
+}
+
+/* The route motif links the mission illustration to the project gallery. */
+.galleryArrival::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  top: -1.9rem;
+  right: 12%;
+  width: clamp(3.5rem, 16vw, 13rem);
+  height: 2.4rem;
+  box-sizing: border-box;
+  border-right: 2px dashed var(--gold);
+  border-bottom: 2px dashed var(--gold);
+  border-radius: 0 0 2.4rem;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .galleryArrival::after {
+    clip-path: inset(0 0 0 calc((1 - var(--arrival, 0)) * 100%));
+  }
 }
