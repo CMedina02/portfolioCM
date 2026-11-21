@@ -3,7 +3,6 @@ import styles from './ContactSection.module.css'
 function ContactSection() {
   return (
     <section className={styles.contact} id="contact" aria-labelledby="contact-title">
-      <div className={styles.contactMeta}><span>06 / CONTACTO</span><span>CONVERSEMOS</span></div>
       <div className={styles.contactContent}>
         <div>
           <p className={styles.eyebrow}>CONTACTO</p>

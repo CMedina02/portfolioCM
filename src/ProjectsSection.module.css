@@ -22,7 +22,12 @@
 .mediaType { top: 1.1rem; right: 1.2rem; opacity: .76; }
 .mediaCaption { right: 1.2rem; bottom: 1.1rem; }
 .artwork { width: min(76%, 35rem); transition: transform .65s cubic-bezier(.2,.7,.2,1); }
-.projectCard:hover .artwork { transform: scale(1.035); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .projectCard:hover .artwork { transform: translateY(-.18rem) scale(1.04); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .projectCard:focus-within .artwork { transform: scale(1.04); }
+}
 .mapArtwork, .chartArtwork { width: 100%; height: auto; overflow: visible; }
 .mapArtwork path { fill: none; stroke: rgb(242 240 233 / 30%); stroke-width: 1.2; }
 .mapArtwork .routeLine { stroke: var(--gold); stroke-width: 3; stroke-dasharray: 8 7; animation: routeTravel 8s linear infinite; }
@@ -94,3 +99,99 @@
 .projectCard:hover { border-color: #b8b9aa; box-shadow: 0 16px 34px rgb(36 71 57 / 10%); transform: translateY(-3px); }
 
 @keyframes routeTravel { to { stroke-dashoffset: -60; } }
+
+/* Large artwork leads each story, with captions on the page surface. */
+.projects .projectCard {
+  background: transparent;
+  box-shadow: none;
+  border: 0;
+  transform: none;
+}
+.projects .projectContent { padding-inline: 0; }
+.projectMedia { border-radius: .65rem; }
+.projectMedia::after { content: none; }
+.featuredCard .artwork { width: min(84%, 49rem); }
+.projectGrid { row-gap: clamp(2.6rem, 6vw, 6rem); }
+@media (min-width: 760px) {
+  .featuredCard {
+    grid-template-columns: 1fr;
+    margin-bottom: clamp(3rem, 6vw, 6rem);
+  }
+  .featuredCard .projectMedia { aspect-ratio: 3 / 1; }
+  .featuredCard .projectContent {
+    display: grid;
+    grid-template-columns: .8fr 1.2fr;
+    align-items: start;
+    gap: .5rem 3rem;
+  }
+  .featuredCard .projectMeta { grid-column: 1 / -1; }
+  .featuredCard h3 { grid-row: span 3; }
+  .featuredCard .repositoryLink { grid-column: 2; }
+  .projectGrid { grid-template-columns: 1.15fr 1fr; column-gap: clamp(2rem, 5vw, 5rem); }
+  .projectGrid article:nth-child(2) { margin-top: 5rem; }
+  .projectGrid article:last-child { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 3rem; }
+}
+@keyframes openArtwork {
+  from { clip-path: inset(5% 4% round 1.2rem); }
+  to { clip-path: inset(0 round .65rem); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .projectMedia {
+      animation: openArtwork linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 36%;
+    }
+  }
+}
+
+.galleryHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: clamp(2rem, 5vw, 4rem);
+}
+.galleryHeader h2 {
+  margin: 0;
+  font: 500 clamp(2.6rem, 6vw, 5.5rem)/.98 var(--serif);
+  letter-spacing: -.055em;
+  color: var(--forest);
+}
+.galleryHeader em { display: block; margin-left: .45em; font-weight: 400; color: var(--gold-dark); }
+.switcher { display: inline-flex; padding: .2rem; border: 1px solid #bfc6b8; border-radius: 2rem; }
+.switcher button, .archiveList button {
+  background: transparent;
+  color: var(--forest);
+  cursor: pointer;
+  border: 0;
+}
+.switcher button { min-height: 44px; padding-inline: 1.1rem; border-radius: 2rem; font: .8rem var(--mono); }
+.switcher button[aria-pressed=true] { background: var(--forest); color: var(--ivory); }
+.archive { display: grid; gap: clamp(1rem, 4vw, 4rem); align-items: start; }
+.archiveList { display: grid; border-top: 1px solid var(--line); }
+.archiveList button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .5rem;
+  min-height: 3.6rem;
+  padding: .8rem .45rem;
+  border-bottom: 1px solid var(--line);
+  font: 500 clamp(.9rem, 1.5vw, 1.3rem) var(--sans);
+  text-align: left;
+}
+.archiveList button[aria-pressed=true] { color: var(--ivory); background: var(--forest); padding-inline: 1rem; }
+.archiveList button span { color: var(--gold-dark); }
+.archiveList button[aria-pressed=true] span { color: var(--gold); }
+.previewPane { min-width: 0; }
+.previewPane .projectCard { display: block; margin: 0; }
+.previewPane .projectMedia { aspect-ratio: 2 / 1; min-height: 10rem; }
+.previewPane .projectContent { display: block; padding: 1rem 0; }
+@media (min-width: 760px) { .archive { grid-template-columns: minmax(13rem,.7fr) minmax(0,1.3fr); } }
+@media (prefers-reduced-motion: no-preference) {
+  .previewEntry { animation: changeProject .45s cubic-bezier(.16,1,.3,1) both; }
+  .switcher button, .archiveList button { transition: color .22s, background-color .22s, padding .22s; }
+  @keyframes changeProject { from { opacity: .45; transform: translateY(.75rem); } }
+}

@@ -17,7 +17,6 @@ function getIconUrl(technology: Technology) {
 function SkillsSection() {
   return (
     <section className={styles.skills} id="skills" aria-labelledby="skills-title">
-      <div className={styles.sectionMeta}><span>02 / HERRAMIENTAS</span><span>STACK Y ECOSISTEMA</span></div>
       <header className={styles.sectionHeader}>
         <p className={styles.eyebrow}>TECNOLOGÍAS Y HABILIDADES</p>
         <h2 id="skills-title" tabIndex={-1}>Herramientas para<br /><em>construir.</em></h2>

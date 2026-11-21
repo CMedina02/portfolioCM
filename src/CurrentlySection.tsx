@@ -10,7 +10,6 @@ const activities = [
 function CurrentlySection() {
   return (
     <section className={styles.section} id="currently" aria-labelledby="currently-title">
-      <div className={styles.sectionMeta}><span>05 / EN PROCESO</span><span>APRENDIZAJE CONTINUO</span></div>
       <div className={styles.content}>
         <header className={styles.sectionHeader}>
           <p className={styles.eyebrow}>ACTUALMENTE</p>

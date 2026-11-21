@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { projects, type Project } from './data/projects'
 import styles from './ProjectsSection.module.css'
 
@@ -34,10 +35,7 @@ function ProjectMedia({ project }: { project: Project }) {
 
   return (
     <div className={styles.projectMedia} data-project={project.id} role="img" aria-label={`Ilustración editorial de ${project.name}`}>
-      <span className={styles.mediaIndex}>0{project.id === 'mapte' ? '1' : project.id === 'kanbanproject' ? '2' : project.id === 'pizzeria-paco' ? '3' : '4'}</span>
-      <span className={styles.mediaType}>PROJECT / OVERVIEW</span>
       <div className={styles.artwork}>{visual}</div>
-      <span className={styles.mediaCaption}>{project.name}</span>
     </div>
   )
 }
@@ -51,10 +49,7 @@ function ProjectCard({ project }: { project: Project }) {
     <article data-project-card className={cardClass} aria-labelledby={`project-${project.id}`}>
       <ProjectMedia project={project} />
       <div className={styles.projectContent}>
-        <div className={styles.projectMeta}>
-          <span>{project.featured ? 'PROYECTO DESTACADO' : 'PROYECTO'}</span>
-          {project.context && <span>{project.context}</span>}
-        </div>
+        {project.context && <div className={styles.projectMeta}>{project.context}</div>}
         <h3 id={`project-${project.id}`}>{project.name}</h3>
         <p className={styles.projectDescription}>{project.description}</p>
         <ul className={styles.technologyList} aria-label={`Tecnologías de ${project.name}`}>
@@ -71,21 +66,44 @@ function ProjectCard({ project }: { project: Project }) {
 }
 
 function ProjectsSection() {
+  const [view, setView] = useState<'Galería' | 'Índice'>('Galería')
+  const [selected, setSelected] = useState(projects[0])
   const [featuredProject, ...otherProjects] = projects
 
   return (
     <section className={styles.projects} id="projects" aria-labelledby="projects-title">
-      <div className={styles.sectionMeta}><span>03 / SELECCIÓN</span><span>TRABAJO RECIENTE</span></div>
-      <header className={styles.sectionHeader}>
-        <p className={styles.eyebrow}>PROYECTOS DESTACADOS</p>
-        <h2 id="projects-title" tabIndex={-1}>Ideas hechas<br /><em>proyecto.</em></h2>
-        <p className={styles.intro}>Una selección de aplicaciones y herramientas que he desarrollado.</p>
+      <header className={styles.galleryHeader}>
+
+        <h2 id="projects-title" tabIndex={-1}>Proyectos <em>seleccionados.</em></h2>
+        <div className={styles.switcher} role="group" aria-label="Presentación de proyectos">
+          {(['Galería', 'Índice'] as const).map(option => (
+            <button key={option} type="button" aria-pressed={view === option} onClick={() => setView(option)}>
+              {option}
+            </button>
+          ))}
+        </div>
       </header>
 
+      {view === 'Galería' ? <>
       {featuredProject && <ProjectCard project={featuredProject} />}
       <div className={styles.projectGrid}>
         {otherProjects.map((project) => <ProjectCard project={project} key={project.id} />)}
       </div>
+      </> : (
+        <div className={styles.archive}>
+          <div className={styles.archiveList} role="group" aria-label="Seleccionar proyecto">
+            {projects.map(project => (
+              <button type="button" key={project.id} aria-pressed={selected.id === project.id}
+                aria-controls="project-preview" onClick={() => setSelected(project)}>
+                {project.name}<span aria-hidden="true">↗</span>
+              </button>
+            ))}
+          </div>
+          <div id="project-preview" className={styles.previewPane}>
+            <div key={selected.id} className={styles.previewEntry}><ProjectCard project={selected} /></div>
+          </div>
+        </div>
+      )}
     </section>
   )
 }

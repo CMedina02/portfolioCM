@@ -1,0 +1,35 @@
+.preview {
+  margin: 0;
+  padding: clamp(1rem, 3vw, 2rem);
+  border-radius: 50% / 8%;
+  background-color: transparent;
+  background-image: radial-gradient(#506152 0.7px, transparent 0.8px);
+  background-size: 14px 14px;
+  color: var(--ivory);
+}
+.preview figcaption, .controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .65rem;
+  font: .75rem var(--mono);
+}
+.preview figcaption span { color: var(--gold); letter-spacing: .13em; }
+.preview svg { display: block; width: 100%; max-height: 32rem; margin: .6rem auto; }
+.controls { padding-top: .75rem; border-top: 1px solid #657365; flex-wrap: wrap; }
+.controls button {
+  min-height: 44px;
+  padding: .5rem .85rem;
+  border: 1px solid #839483;
+  border-radius: 2rem;
+  background: var(--forest-deep);
+  color: var(--ivory);
+  font: inherit;
+  cursor: pointer;
+}
+.controls button:is(:hover,:focus-visible) { background: var(--ivory); color: var(--forest); }
+@media (prefers-reduced-motion: no-preference) {
+  .marker { transition: cx .55s ease, cy .55s ease; }
+  .preview svg { animation: arrive .85s ease-out both; }
+  @keyframes arrive { from { opacity: .2; transform: translateY(8px) rotate(-3deg); } }
+}

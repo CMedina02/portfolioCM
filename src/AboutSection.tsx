@@ -4,7 +4,6 @@ import styles from './AboutSection.module.css'
 function AboutSection() {
   return (
     <section className={styles.about} id="about" aria-labelledby="about-title">
-      <div className={styles.sectionMeta}><span>01 / PERFIL</span><span>UN POCO SOBRE MÍ</span></div>
       <div className={styles.aboutGrid}>
         <div className={styles.aboutCopy}>
           <p className={styles.eyebrow}>SOBRE MÍ</p>
