@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type MouseEvent as ReactMouseEvent } from 'react'
 import AboutSection from './AboutSection'
 import ContactSection from './ContactSection'
 import CurrentlySection from './CurrentlySection'
@@ -10,83 +10,110 @@ import styles from './App.module.css'
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState('home')
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
+  const headerRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    if (!menuOpen) return
+
+    const closeOnOutsidePress = (event: PointerEvent) => {
+      if (event.target instanceof Node && !headerRef.current?.contains(event.target)) setMenuOpen(false)
+    }
+    const closeOnDesktop = (event: MediaQueryListEvent) => {
+      if (event.matches) setMenuOpen(false)
+    }
+    const desktopQuery = window.matchMedia('(min-width: 1100px)')
+
+    document.addEventListener('pointerdown', closeOnOutsidePress)
+    desktopQuery.addEventListener('change', closeOnDesktop)
+    return () => {
+      document.removeEventListener('pointerdown', closeOnOutsidePress)
+      desktopQuery.removeEventListener('change', closeOnDesktop)
+    }
+  }, [menuOpen])
+
+  useEffect(() => {
+    const sections = Array.from(document.querySelectorAll<HTMLElement>('main section[id]'))
+    if (!('IntersectionObserver' in window)) return
+    const updateActive = () => {
+      const marker = window.innerHeight * 0.3
+      const current = sections.filter((section) => section.getBoundingClientRect().top <= marker).at(-1)
+      setActiveSection(current?.id ?? 'home')
+    }
+    const observer = new IntersectionObserver(updateActive, { rootMargin: '-30% 0px -69% 0px' })
+    sections.forEach((section) => observer.observe(section))
+    updateActive()
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const items = document.querySelectorAll<HTMLElement>('[data-reveal], [data-project-card]')
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add(styles.revealed)
+          observer.unobserve(entry.target)
+        }
+      })
+    }, { threshold: 0.08 })
+    items.forEach((item) => {
+      if (item.getBoundingClientRect().top >= window.innerHeight) {
+        item.classList.add(styles.revealPending)
+        observer.observe(item)
+      }
+    })
+    return () => { observer.disconnect(); items.forEach((item) => item.classList.remove(styles.revealPending, styles.revealed)) }
+  }, [])
 
   const closeMenu = () => setMenuOpen(false)
+  const handleMenuKeyDown = (event: ReactKeyboardEvent<HTMLElement>) => {
+    if (event.key === 'Escape') {
+      closeMenu()
+      menuButtonRef.current?.focus({ preventScroll: true })
+    }
+  }
+  const handleMobileNavigation = (event: ReactMouseEvent<HTMLAnchorElement>) => {
+    const href = event.currentTarget.getAttribute('href')
+    closeMenu()
+
+    if (href?.startsWith('#')) {
+      const target = document.getElementById(href.slice(1))
+      const heading = target?.querySelector<HTMLElement>('h1, h2')
+      window.requestAnimationFrame(() => heading?.focus({ preventScroll: true }))
+    } else {
+      menuButtonRef.current?.focus({ preventScroll: true })
+    }
+  }
 
   return (
     <div className={styles.siteShell}>
-      <aside className={styles.sidebar} aria-label="Navegación principal">
-        <a className={styles.brand} href="#home" onClick={closeMenu} aria-label="Cristian Medina, inicio">
-          <span className={styles.brandMark}>CM</span>
-          <span className={styles.brandCaption}>Portfolio<br />2026</span>
-        </a>
-
-        <div className={styles.sidebarRule} />
-        <p className={styles.navLabel}>Índice</p>
-        <nav className={styles.desktopNav}>
-          <a className={styles.navLink} href="#home" aria-current="page">
-            <span className={styles.navNumber}>01</span> Inicio
-          </a>
-          <a className={styles.navLink} href="#about">
-            <span className={styles.navNumber}>02</span> Sobre mí
-          </a>
-          <a className={styles.navLink} href="#skills">
-            <span className={styles.navNumber}>03</span> Tecnologías
-          </a>
-          <a className={styles.navLink} href="#projects">
-            <span className={styles.navNumber}>04</span> Proyectos
-          </a>
-          <a className={styles.navLink} href="#other-projects">
-            <span className={styles.navNumber}>05</span> Otros proyectos
-          </a>
-          <a className={styles.navLink} href="#currently">
-            <span className={styles.navNumber}>06</span> Actualmente
-          </a>
-          <a className={styles.navLink} href="#contact">
-            <span className={styles.navNumber}>07</span> Contacto
-          </a>
-          <a className={styles.navLink} href="https://github.com/CMedina02" target="_blank" rel="noreferrer">
-            <span className={styles.navNumber}>↗</span> GitHub
-          </a>
+      <a className={styles.skipLink} href="#hero-title">Saltar al contenido principal</a>
+      <header className={styles.topHeader} ref={headerRef} onKeyDown={handleMenuKeyDown}>
+        <a className={styles.logo} href="#home" onClick={closeMenu} aria-label="Cristian Medina, inicio">CM<span> / PORTFOLIO</span></a>
+        <button className={styles.menuButton} type="button" ref={menuButtonRef} aria-expanded={menuOpen} aria-controls="main-navigation" onClick={() => setMenuOpen((open) => !open)}>
+          <span>{menuOpen ? 'Cerrar' : 'Menú'}</span>
+          <span className={menuOpen ? styles.menuIconOpen : styles.menuIcon} aria-hidden="true"><i /><i /></span>
+        </button>
+        <nav className={`${styles.topNav} ${menuOpen ? styles.topNavOpen : ''}`} id="main-navigation" aria-label="Navegación principal">
+          {[
+            ['home', 'Inicio'], ['about', 'Sobre mí'], ['skills', 'Tecnologías'],
+            ['projects', 'Proyectos'], ['other-projects', 'Otros proyectos'],
+            ['currently', 'Actualmente'],
+          ].map(([id, label]) => (
+            <a key={id} href={`#${id}`} aria-current={activeSection === id ? 'location' : undefined} onClick={handleMobileNavigation}>{label}</a>
+          ))}
+          <a className={styles.mobileContact} href="#contact" aria-current={activeSection === 'contact' ? 'location' : undefined} onClick={handleMobileNavigation}>Contacto</a>
         </nav>
-
-        <div className={styles.sidebarBottom}>
-          <span className={styles.availabilityDot} aria-hidden="true" />
-          <p>Backend &amp; Full Stack<br />Software Developer</p>
-          <span className={styles.sidebarEdition}>MÉRIDA · MX</span>
-        </div>
-      </aside>
-
-      <main className={styles.main} id="home">
-        <header className={styles.mobileHeader}>
-          <a className={styles.mobileBrand} href="#home" onClick={closeMenu}>CM<span> / PORTFOLIO</span></a>
-          <button
-            className={styles.menuButton}
-            type="button"
-            aria-expanded={menuOpen}
-            aria-controls="mobile-navigation"
-            onClick={() => setMenuOpen((open) => !open)}
-          >
-            <span>{menuOpen ? 'Cerrar' : 'Menú'}</span>
-            <span className={menuOpen ? styles.menuIconOpen : styles.menuIcon} aria-hidden="true"><i /><i /></span>
-          </button>
-          <nav className={styles.mobileNav} id="mobile-navigation" aria-label="Navegación móvil" hidden={!menuOpen}>
-            <a href="#home" onClick={closeMenu}>Inicio <span>01</span></a>
-            <a href="#about" onClick={closeMenu}>Sobre mí <span>02</span></a>
-            <a href="#skills" onClick={closeMenu}>Tecnologías <span>03</span></a>
-            <a href="#projects" onClick={closeMenu}>Proyectos <span>04</span></a>
-            <a href="#other-projects" onClick={closeMenu}>Otros proyectos <span>05</span></a>
-            <a href="#currently" onClick={closeMenu}>Actualmente <span>06</span></a>
-            <a href="#contact" onClick={closeMenu}>Contacto <span>07</span></a>
-            <a href="https://github.com/CMedina02" target="_blank" rel="noreferrer" onClick={closeMenu}>GitHub <span>↗</span></a>
-          </nav>
-        </header>
-
-        <section className={styles.hero} aria-labelledby="hero-title">
+        <a className={styles.contactAction} href="#contact" aria-current={activeSection === 'contact' ? 'location' : undefined} onClick={handleMobileNavigation}>Contacto <span aria-hidden="true">↗</span></a>
+      </header>
+      <main className={styles.main} id="main-content">
+        <section className={styles.hero} id="home" aria-labelledby="hero-title">
           <div className={styles.heroCopy}>
             <div className={styles.eyebrow}><span /> PERFIL · DESARROLLO DE SOFTWARE</div>
             <p className={styles.intro}>Hola, soy</p>
-            <h1 id="hero-title">Cristian<br /><em>Medina.</em></h1>
+            <h1 id="hero-title" tabIndex={-1}>Cristian<br /><em>Medina.</em></h1>
             <p className={styles.role}>Software Developer <span>|</span> Backend &amp; Full Stack</p>
             <p className={styles.description}>
               Desarrollo aplicaciones Backend, soluciones Full Stack y sistemas empresariales. Me interesa crear software claro, útil y bien estructurado.
@@ -96,12 +123,12 @@ function App() {
                 <span>Visita mi GitHub</span><span className={styles.arrow} aria-hidden="true">↗</span>
               </a>
             </div>
-            <div className={styles.heroIndex}><span>01 — 01</span><span>SCROLL TO EXPLORE</span></div>
+            <div className={styles.heroIndex}><span>01 — 07</span><span>SCROLL TO EXPLORE</span></div>
           </div>
 
           <div className={styles.visualColumn}>
             <div className={styles.visualHeading}><span>ESPACIO DE TRABAJO</span><span>FIG. 01</span></div>
-            <div className={styles.deskScene} role="img" aria-label="Espacio reservado para una ilustración de escritorio con Tux">
+            <div className={styles.deskScene} role="img" aria-label="Ilustración de un escritorio de desarrollo con una terminal Linux y Tux">
               <div className={styles.sceneTopline}><span>SYS / USER</span><span>~</span></div>
               <div className={styles.monitor}>
                 <div className={styles.monitorFrame}>
@@ -126,16 +153,16 @@ function App() {
               <div className={styles.deskSurface} />
               <span className={styles.sceneCaption}>Una mesa para construir<br />cosas que importan.</span>
             </div>
-            <div className={styles.visualCaption}><span>ENTORNO DE TRABAJO</span><span>ILUSTRACIÓN EDITABLE</span></div>
+            <div className={styles.visualCaption}><span>ENTORNO DE TRABAJO</span><span>LINUX · TERMINAL · TUX</span></div>
           </div>
         </section>
 
-        <AboutSection />
-        <SkillsSection />
-        <ProjectsSection />
-        <OtherProjectsSection />
-        <CurrentlySection />
-        <ContactSection />
+        <div data-reveal><AboutSection /></div>
+        <div data-reveal><SkillsSection /></div>
+        <div data-reveal><ProjectsSection /></div>
+        <div data-reveal><OtherProjectsSection /></div>
+        <div data-reveal><CurrentlySection /></div>
+        <div data-reveal><ContactSection /></div>
         <PortfolioFooter />
       </main>
     </div>

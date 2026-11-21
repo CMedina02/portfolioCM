@@ -8,7 +8,7 @@ function AboutSection() {
       <div className={styles.aboutGrid}>
         <div className={styles.aboutCopy}>
           <p className={styles.eyebrow}>SOBRE MÍ</p>
-          <h2 id="about-title">Software pensado<br />para <em>resolver.</em></h2>
+          <h2 id="about-title" tabIndex={-1}>Software pensado<br />para <em>resolver.</em></h2>
           <p>
             Mi formación en Ingeniería en Sistemas Computacionales guía mi manera de abordar el desarrollo: entender el problema y construir soluciones claras.
           </p>

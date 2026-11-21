@@ -20,7 +20,7 @@ function SkillsSection() {
       <div className={styles.sectionMeta}><span>02 / HERRAMIENTAS</span><span>STACK Y ECOSISTEMA</span></div>
       <header className={styles.sectionHeader}>
         <p className={styles.eyebrow}>TECNOLOGÍAS Y HABILIDADES</p>
-        <h2 id="skills-title">Herramientas para<br /><em>construir.</em></h2>
+        <h2 id="skills-title" tabIndex={-1}>Herramientas para<br /><em>construir.</em></h2>
         <p className={styles.intro}>Lenguajes, frameworks y entornos que forman parte de mi stack.</p>
       </header>
 
@@ -39,7 +39,7 @@ function SkillsSection() {
                 return (
                   <li className={styles.technology} key={`${category.id}-${technology.name}`}>
                     {iconUrl ? (
-                      <img className={styles.icon} src={iconUrl} alt="" aria-hidden="true" loading="lazy" />
+                      <img className={styles.icon} src={iconUrl} alt="" aria-hidden="true" width="20" height="20" loading="lazy" decoding="async" />
                     ) : (
                       <span className={styles.textMark} aria-hidden="true">{technology.textMark}</span>
                     )}

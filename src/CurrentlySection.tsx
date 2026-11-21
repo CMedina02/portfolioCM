@@ -14,7 +14,7 @@ function CurrentlySection() {
       <div className={styles.content}>
         <header className={styles.sectionHeader}>
           <p className={styles.eyebrow}>ACTUALMENTE</p>
-          <h2 id="currently-title">En constante<br /><em>construcción.</em></h2>
+          <h2 id="currently-title" tabIndex={-1}>En constante<br /><em>construcción.</em></h2>
         </header>
         <ol className={styles.activityList}>
           {activities.map((activity, index) => (

@@ -1,4 +1,4 @@
-.footer { max-width: 80rem; display: flex; flex-direction: column; gap: .8rem; margin: 0 auto; padding: 1.25rem 0 1.6rem; color: var(--muted); border-top: 1px solid var(--line); }
+.footer { max-width: var(--content-width); display: flex; flex-direction: column; gap: .8rem; margin: 0 auto; padding: 1.25rem 0 1.6rem; color: var(--muted); border-top: 1px solid var(--line); }
 .footer > div { display: grid; gap: .3rem; }
 .name { color: var(--forest); font-size: .78rem; font-weight: 600; }
 .role { font-size: .68rem; }

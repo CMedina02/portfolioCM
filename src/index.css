@@ -1,19 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap');
-
 :root {
   --ivory: #f2f0e9;
   --forest: #244739;
   --forest-deep: #19382d;
   --gold: #d2aa65;
-  --gold-dark: #98723a;
+  --gold-dark: #805f2b;
   --ink: #252b26;
-  --muted: #697169;
+  --muted: #606960;
   --line: #d9d8ce;
+  --surface: #f8f6f0;
+  --surface-raised: #fffdf7;
+  --content-width: 80rem;
+  --section-space: clamp(3.5rem, 7vw, 6.5rem);
+  --section-title: clamp(2.3rem, 5.4vw, 4.5rem);
+  --mobile-gutter: clamp(1.15rem, 5.4vw, 2.25rem);
   --sans: 'DM Sans', 'Segoe UI', sans-serif;
   --serif: 'Playfair Display', Georgia, serif;
   --mono: 'DM Mono', 'SFMono-Regular', Consolas, monospace;
 
   font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.55;
   color: var(--ink);
   background: var(--ivory);
   font-synthesis: none;
@@ -25,11 +31,15 @@
 
 * { box-sizing: border-box; }
 
-html { min-width: 320px; scroll-behavior: smooth; }
+html { min-width: 320px; scroll-behavior: smooth; scroll-padding-top: 6rem; }
 
-body { min-width: 320px; min-height: 100vh; margin: 0; }
+body { min-width: 320px; min-height: 100vh; margin: 0; background: var(--ivory); }
+
+section[id] { scroll-margin-top: 6.25rem; }
 
 button, a { -webkit-tap-highlight-color: transparent; }
+
+:focus-visible { outline: 2px solid var(--forest); outline-offset: 4px; }
 
 ::selection { color: var(--ivory); background: var(--forest); }
 

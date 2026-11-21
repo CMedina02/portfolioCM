@@ -22,7 +22,7 @@ function Neofetch() {
       |:_/ |
      //   \\ \\
     (|     | )
-   /'\\_   _/` + '`' + `\\
+   /'\\_   _/\\
    \\___)=(___/`}</pre>
         <dl className={styles.profile}>
           {profile.map(([label, value], index) => (

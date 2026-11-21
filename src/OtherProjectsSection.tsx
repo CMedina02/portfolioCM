@@ -7,7 +7,7 @@ function OtherProjectsSection() {
       <div className={styles.sectionMeta}><span>04 / ARCHIVO</span><span>OTROS PROYECTOS</span></div>
       <header className={styles.sectionHeader}>
         <p className={styles.eyebrow}>OTROS PROYECTOS</p>
-        <h2 id="other-projects-title">Más trabajo,<br /><em>otras ideas.</em></h2>
+        <h2 id="other-projects-title" tabIndex={-1}>Más trabajo,<br /><em>otras ideas.</em></h2>
       </header>
       <div className={styles.projectGrid}>
         {otherProjects.map((project, index) => (
