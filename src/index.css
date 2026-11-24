@@ -13,6 +13,8 @@
   --section-space: clamp(3.5rem, 7vw, 6.5rem);
   --section-title: clamp(2.3rem, 5.4vw, 4.5rem);
   --mobile-gutter: clamp(1.15rem, 5.4vw, 2.25rem);
+  --site-header-inset: .55rem;
+  --site-scroll-start: calc(var(--site-header-inset) + var(--site-header-height, 4.25rem) + .75rem);
   --sans: 'DM Sans', 'Segoe UI', sans-serif;
   --serif: 'Playfair Display', Georgia, serif;
   --mono: 'DM Mono', 'SFMono-Regular', Consolas, monospace;
@@ -31,18 +33,12 @@
 
 * { box-sizing: border-box; }
 
-html { min-width: 320px; scroll-behavior: smooth; scroll-padding-top: 6rem; }
+html { scroll-padding-block-start: var(--site-scroll-start); }
 
-body { min-width: 320px; min-height: 100vh; margin: 0; background: var(--ivory); }
-
-section[id] { scroll-margin-top: 6.25rem; }
+body { min-height: 100vh; margin: 0; background: var(--ivory); }
 
 button, a { -webkit-tap-highlight-color: transparent; }
 
 :focus-visible { outline: 2px solid var(--forest); outline-offset: 4px; }
 
 ::selection { color: var(--ivory); background: var(--forest); }
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { scroll-behavior: auto !important; }
-}

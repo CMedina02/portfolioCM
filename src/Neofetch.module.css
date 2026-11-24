@@ -15,18 +15,16 @@
 .rule { grid-column: 1 / -1; height: 1px; margin-top: .1rem; background: #3b4f41; }
 .terminalFoot { display: flex; justify-content: space-between; gap: .7rem; padding: .75rem 1rem; border-top: 1px solid #344a3d; color: #91a092; font: .56rem var(--mono); letter-spacing: .06em; }
 
-@media (max-width: 420px) {
-  .terminalBody { flex-direction: column; align-items: stretch; }
-  .tux { align-self: center; font-size: .58rem; }
-  .profile { width: 100%; font-size: .7rem; }
-  .profileRow { grid-template-columns: 4.6rem minmax(0, 1fr); }
+@container (max-width: 28rem) {
+  .terminalBody { gap: .7rem; padding: 1rem; }
+  .tux { font-size: .58rem; }
+  .profile { flex: 1; font-size: .7rem; }
+  .profileRow { grid-template-columns: 4.4rem minmax(0, 1fr); }
 }
 
-@container (max-width: 28rem) {
+@container (max-width: 20rem) {
   .terminalBody { flex-direction: column; align-items: stretch; }
-  .tux { align-self: center; font-size: .58rem; }
-  .profile { width: 100%; font-size: .7rem; }
-  .profileRow { grid-template-columns: 4.6rem minmax(0, 1fr); }
+  .tux { align-self: center; }
 }
 
 .commands {

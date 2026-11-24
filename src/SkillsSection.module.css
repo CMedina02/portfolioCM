@@ -1,4 +1,4 @@
-.skills { width: 100%; max-width: var(--content-width); margin: 0 auto; padding: var(--section-space) 0; border-top: 1px solid var(--line); scroll-margin-top: 6.25rem; }
+.skills { width: 100%; max-width: var(--content-width); margin: 0 auto; padding: var(--section-space) 0; }
 .sectionMeta { display: flex; justify-content: space-between; gap: .75rem; margin-bottom: clamp(2rem, 4.5vw, 3.5rem); padding-bottom: .85rem; color: var(--muted); border-bottom: 1px solid var(--line); font: .62rem var(--mono); letter-spacing: .09em; }
 .sectionHeader { margin-bottom: clamp(2rem, 4.5vw, 3.5rem); }
 .eyebrow { margin: 0 0 .9rem; color: var(--forest); font: 600 .68rem var(--mono); letter-spacing: .11em; }

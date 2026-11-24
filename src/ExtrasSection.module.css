@@ -1,0 +1,56 @@
+.section {
+  max-inline-size: var(--content-width);
+  margin-inline: auto;
+  padding-block: var(--section-space);
+}
+
+.eyebrow {
+  margin: 0 0 .65rem;
+  color: var(--forest);
+  font: 600 .68rem var(--mono);
+  letter-spacing: .11em;
+}
+
+.section h2 {
+  margin: 0;
+  color: var(--forest);
+  font: 500 clamp(2.25rem, 1.4rem + 3vw, 3.75rem)/1.05 var(--serif);
+  letter-spacing: -.045em;
+}
+
+.events {
+  display: grid;
+  gap: 1rem;
+  margin: clamp(1.25rem, 3vw, 2rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.events li {
+  padding: 1rem 1.15rem;
+  border-inline-start: 2px solid var(--gold);
+  background: var(--surface);
+}
+
+.events time {
+  color: var(--gold-dark);
+  font: .79rem var(--mono);
+}
+
+.events h3 {
+  margin: .4rem 0 0;
+  color: var(--forest);
+  font: 600 1.05rem/1.35 var(--sans);
+}
+
+.events p {
+  margin: .45rem 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+@media (min-width: 800px) {
+  .events {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

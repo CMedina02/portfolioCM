@@ -1,0 +1,135 @@
+.dialog {
+  position: fixed;
+  inset: auto 0 0;
+  inline-size: 100%;
+  max-inline-size: none;
+  max-block-size: 92dvh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 1.35rem 1.35rem 0 0;
+  background: var(--surface-raised);
+  color: var(--ink);
+  box-shadow: 0 -1rem 5rem rgb(14 36 27 / 24%);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.dialog[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+.dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background: rgb(15 33 26 / 63%);
+}
+
+.toolbar, .navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .55rem;
+  padding: .65rem clamp(.9rem, 4.6vw, 2.65rem);
+}
+
+.toolbar { color: var(--ivory); background: var(--forest-deep); }
+.toolbar p { margin: 0; color: var(--gold); font: 500 .8rem var(--mono); letter-spacing: .08em; }
+.toolbar p > span[aria-hidden] { margin-inline: .18rem; }
+
+.closeButton, .navigation button {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  min-block-size: 44px;
+  padding: .35rem .8rem;
+  border: 1px solid currentColor;
+  border-radius: 2rem;
+  background: transparent;
+  color: inherit;
+  font: 700 .85rem var(--sans);
+  cursor: pointer;
+}
+
+.closeButton span { font: 400 1.35rem/1 var(--sans); }
+.closeButton:hover { background: var(--ivory); color: var(--forest-deep); }
+.closeButton:focus-visible { outline-color: var(--gold); }
+
+.body {
+  padding: clamp(1rem, 4.6vw, 2.65rem);
+  overflow: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y pinch-zoom;
+}
+
+.slide { display: grid; gap: clamp(.85rem, 2vw, 1.35rem); min-inline-size: 0; }
+.heading p { margin: 0 0 .55rem; color: var(--gold-dark); font: 500 .75rem/1.45 var(--mono); }
+.heading h2 {
+  margin: 0;
+  color: var(--forest);
+  font: 500 clamp(1.9rem, 1.25rem + 2.4vw, 3.3rem)/1.04 var(--serif);
+  letter-spacing: -.035em;
+  overflow-wrap: anywhere;
+}
+
+.description { margin: 0; color: var(--muted); text-wrap: pretty; }
+.highlights { display: grid; gap: .55rem; margin: 0; padding: .9rem 1rem .9rem 2rem; border-radius: .75rem; background: #e9ede4; color: var(--forest-deep); }
+.highlights li::marker { color: var(--gold-dark); }
+
+.navigation {
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--forest);
+  padding-block-end: max(.65rem, env(safe-area-inset-bottom));
+}
+.navigation button:hover { background: var(--forest); color: var(--ivory); }
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (min-width: 720px) {
+  .dialog {
+    inset: 0 0 0 auto;
+    inline-size: min(100%, 42rem);
+    block-size: 100dvh;
+    max-block-size: none;
+    border-radius: 1.35rem 0 0 1.35rem;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .dialog {
+    --offscreen: 0 100%;
+    opacity: 0;
+    translate: var(--offscreen);
+    transition: translate .36s cubic-bezier(.22,.8,.25,1), opacity .25s, display .36s, overlay .36s;
+    transition-behavior: allow-discrete;
+  }
+  .dialog[open]:not([data-closing]) {
+    opacity: 1;
+    translate: 0 0;
+  }
+  .dialog::backdrop {
+    opacity: 0;
+    transition: opacity .3s, display .36s, overlay .36s;
+    transition-behavior: allow-discrete;
+  }
+  .dialog[open]:not([data-closing])::backdrop { opacity: 1; }
+
+  @starting-style {
+    .dialog[open]:not([data-closing]) { opacity: 0; translate: var(--offscreen); }
+    .dialog[open]:not([data-closing])::backdrop { opacity: 0; }
+  }
+
+  .slide[data-direction='1'] { --slide-from: 1rem; }
+  .slide[data-direction='-1'] { --slide-from: -1rem; }
+  .slide:not([data-direction='0']) { animation: advance .34s cubic-bezier(.2,.78,.25,1) both; }
+  .closeButton, .navigation button { transition: background-color .18s, color .18s; }
+
+  @keyframes advance { from { opacity: .35; translate: var(--slide-from) 0; } }
+
+  @media (min-width: 720px) { .dialog { --offscreen: 100% 0; } }
+}

@@ -1,4 +1,4 @@
-.section { max-width: var(--content-width); margin: 0 auto; padding: var(--section-space) 0; border-top: 1px solid var(--line); scroll-margin-top: 6.25rem; }
+.section { max-width: var(--content-width); margin: 0 auto; padding: var(--section-space) 0; }
 .sectionMeta { display: flex; justify-content: space-between; gap: .75rem; margin-bottom: clamp(2rem, 5vw, 3.5rem); color: var(--muted); font: .58rem var(--mono); letter-spacing: .08em; }
 .content { display: grid; gap: 1.8rem; }
 .eyebrow { margin: 0 0 .85rem; color: var(--forest); font: 600 .62rem var(--mono); letter-spacing: .1em; }

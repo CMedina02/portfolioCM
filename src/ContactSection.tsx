@@ -7,7 +7,7 @@ function ContactSection() {
     <section className={styles.contact} id="contact" aria-labelledby="contact-title">
       <div>
         <p className={styles.eyebrow}>Contacto</p>
-        <h2 id="contact-title" tabIndex={-1}>¿Qué quieres<br /><em>construir?</em></h2>
+        <h2 id="contact-title" tabIndex={-1}>¿Qué quieres <em>construir?</em></h2>
         <p className={styles.invitation}>Escríbeme si tienes un proyecto en mente, quieres colaborar o buscas un desarrollador backend o full stack para tu equipo.</p>
       </div>
       <div className={styles.channels}>

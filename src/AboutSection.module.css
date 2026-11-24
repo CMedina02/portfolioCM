@@ -1,11 +1,21 @@
-.about { width: 100%; max-width: var(--content-width); margin: 0 auto; padding: var(--section-space) 0; border-top: 1px solid var(--line); scroll-margin-top: 6.25rem; }
+.about { width: 100%; max-width: var(--content-width); margin: 0 auto; padding: var(--section-space) 0; }
 .sectionMeta { display: flex; justify-content: space-between; gap: .75rem; margin-bottom: clamp(2rem, 4.5vw, 3.5rem); padding-bottom: .85rem; color: var(--muted); border-bottom: 1px solid var(--line); font: .62rem var(--mono); letter-spacing: .09em; }
 .aboutGrid { display: grid; align-items: center; gap: clamp(2rem, 4.5vw, 4rem); }
 .aboutCopy { min-width: 0; }
 .eyebrow { margin: 0 0 .9rem; color: var(--forest); font: 600 .68rem var(--mono); letter-spacing: .11em; }
 .aboutCopy h2 { margin: 0; color: var(--forest); font: 500 var(--section-title)/1.04 var(--serif); letter-spacing: -.045em; }
 .aboutCopy h2 em { color: var(--gold-dark); font-weight: 400; }
-.aboutCopy > p:not(.eyebrow) { max-width: 35rem; margin: 1.2rem 0 0; color: var(--muted); font-size: 1rem; line-height: 1.8; }
+.aboutCopy > p:not(.eyebrow) { max-width: 35rem; margin: 1.2rem 0 0; color: var(--muted); font-size: 1rem; line-height: 1.75; text-wrap: pretty; }
+.aboutCopy strong { color: var(--forest); }
+.education {
+  margin-block-start: 1.4rem;
+  padding-inline-start: 1rem;
+  border-inline-start: 2px solid var(--gold);
+  color: var(--muted);
+}
+.education p { margin: 0; }
+.education p + p { margin-block-start: .2rem; }
+.education p:last-child { font: .8rem/1.55 var(--mono); }
 .focusLine { display: flex; align-items: flex-start; gap: .7rem; margin-top: 1.5rem; color: var(--forest); font: .68rem/1.7 var(--mono); }
 .focusLine span { color: var(--gold-dark); }
 
