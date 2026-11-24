@@ -1,4 +1,4 @@
-import { useRef, useState, type MouseEvent } from 'react'
+import { useRef, useState, type MouseEvent, type PointerEvent } from 'react'
 import { projects, type Project } from './data/projects'
 import kanbanCapture from './assets/kanbanproject-captura.jpg'
 import mapteRoute from './assets/mapte-route.webp'
@@ -119,6 +119,28 @@ function ProjectCard({ project, onOpen }: { project: Project; onOpen: OpenProjec
   )
 }
 
+function tiltProjectCard(event: PointerEvent<HTMLDivElement>) {
+  if (event.pointerType !== 'mouse') return
+
+  const scene = event.currentTarget
+  if (!scene.hasAttribute('data-tilted')) {
+    if (!window.matchMedia('(prefers-reduced-motion: no-preference)').matches) return
+    scene.setAttribute('data-tilted', '')
+  }
+
+  const { left, top, width, height } = scene.getBoundingClientRect()
+  const x = Math.max(-1, Math.min(1, (event.clientX - left) * 2 / width - 1))
+  const y = Math.max(-1, Math.min(1, (event.clientY - top) * 2 / height - 1))
+  scene.style.setProperty('--card-rotate-x', `${y * -9}deg`)
+  scene.style.setProperty('--card-rotate-y', `${x * 9}deg`)
+}
+
+function resetProjectCardTilt({ currentTarget }: PointerEvent<HTMLDivElement>) {
+  currentTarget.removeAttribute('data-tilted')
+  currentTarget.style.removeProperty('--card-rotate-x')
+  currentTarget.style.removeProperty('--card-rotate-y')
+}
+
 function ProjectsSection({ onOpen }: { onOpen: OpenProject }) {
   const [view, setView] = useState<'Galería' | 'Índice'>('Galería')
   const [{ index, direction }, setSelection] = useState({ index: 0, direction: '' })
@@ -156,7 +178,12 @@ function ProjectsSection({ onOpen }: { onOpen: OpenProject }) {
         <>
           {featuredProject && <ProjectCard project={featuredProject} onOpen={onOpen} />}
           <div className={styles.projectGrid}>
-            {otherProjects.map(project => <ProjectCard project={project} key={project.id} onOpen={onOpen} />)}
+            {otherProjects.map(project => (
+              <div className={styles.projectCardScene} key={project.id} onPointerMove={tiltProjectCard}
+                onPointerLeave={resetProjectCardTilt} onPointerCancel={resetProjectCardTilt}>
+                <ProjectCard project={project} onOpen={onOpen} />
+              </div>
+            ))}
           </div>
         </>
       ) : (

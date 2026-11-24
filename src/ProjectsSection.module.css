@@ -80,13 +80,21 @@
   margin-top: clamp(2.5rem, 6vw, 5rem);
 }
 
-.projectGrid .projectCard {
-  grid-template-rows: auto 1fr auto;
-  padding-block: 1.2rem;
-  border-block-start: 1px solid var(--line);
+.projectCardScene {
+  display: grid;
+  min-inline-size: 0;
 }
 
-.projectGrid .projectCapture { align-self: end; }
+.projectCardScene > .projectCard {
+  grid-template-rows: auto 1fr auto;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border: 1px solid var(--line);
+  border-radius: 1.15rem;
+  background: var(--surface);
+  box-shadow: 0 8px 24px rgb(36 71 57 / 6%);
+}
+
+.projectCardScene .projectCapture { align-self: end; }
 
 .technologyList {
   display: flex;
@@ -206,6 +214,32 @@
 .detailsButton::after { content: ''; position: absolute; inset: 0; z-index: 1; }
 .detailsButton:is(:hover, :focus-visible) { background: var(--forest); color: var(--ivory); }
 .detailsButton:active { background: var(--forest-deep); color: var(--ivory); }
+
+.projectCardScene .detailsButton {
+  background: var(--forest);
+  color: var(--ivory);
+}
+.projectCardScene .detailsButton:is(:hover, :focus-visible) { background: var(--forest-deep); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .projectCardScene[data-tilted] { z-index: 1; }
+
+  .projectCardScene > .projectCard {
+    transition: transform .24s ease-out, box-shadow .24s ease-out;
+  }
+
+  .projectCardScene :is(.projectHeading, .captureMedia) {
+    transition: transform .24s ease-out;
+  }
+
+  .projectCardScene[data-tilted] > .projectCard {
+    transform: perspective(1050px) rotateX(var(--card-rotate-x, 0deg)) rotateY(var(--card-rotate-y, 0deg));
+    box-shadow: 0 18px 42px rgb(36 71 57 / 16%);
+    transition-duration: .14s;
+  }
+  .projectCardScene[data-tilted] .projectHeading { transform: translateY(-3px); }
+  .projectCardScene[data-tilted] .captureMedia { transform: translateY(-5px) scale(1.025); }
+}
 
 @container projects (36rem <= width < 51rem) {
   .projectGrid .projectCard {

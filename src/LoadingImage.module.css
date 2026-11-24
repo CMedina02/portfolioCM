@@ -1,0 +1,29 @@
+.frame { position: relative; }
+
+.frame img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  border-radius: inherit;
+}
+
+.frame[data-image-state='loading'] img,
+.frame[data-image-state='error'] img { opacity: 0; }
+
+.placeholder, .error {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.error {
+  display: grid;
+  place-items: center;
+  padding: .5rem;
+  background: #e0e5da;
+  color: var(--forest);
+  font: .75rem/1.4 var(--mono);
+  text-align: center;
+}
