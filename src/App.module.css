@@ -82,15 +82,6 @@
   justify-content: center;
   gap: clamp(.85rem, 4vw, 4rem);
 }
-.heroPortrait {
-  display: block;
-  inline-size: clamp(6rem, 31vw, 18rem);
-  max-inline-size: 100%;
-  block-size: auto;
-  aspect-ratio: 1;
-  image-rendering: pixelated;
-  filter: drop-shadow(0 0 .7rem rgb(210 170 101 / 26%));
-}
 .eyebrow, .visualHeading, .visualCaption, .heroIndex, .sceneTopline { font-family: var(--mono); letter-spacing: .08em; }
 .eyebrow { display: flex; align-items: center; justify-content: center; gap: .7rem; color: var(--panel-accent); font-size: .65rem; font-weight: 600; }
 .eyebrow span { width: 1.6rem; height: 1px; flex: 0 0 auto; background: currentColor; }

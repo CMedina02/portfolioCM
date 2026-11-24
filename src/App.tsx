@@ -6,7 +6,7 @@ import ExtrasSection from './ExtrasSection'
 import ProjectDialog, { type ProjectDialogHandle } from './ProjectDialog'
 import ProjectsSection, { type OpenProject } from './ProjectsSection'
 import SkillsSection from './SkillsSection'
-import portrait from './assets/cristian-pixel-art-transparente.webp'
+import PixelPortrait from './PixelPortrait'
 import styles from './App.module.css'
 
 function getSectionHeading(target: HTMLElement) {
@@ -194,7 +194,7 @@ function App() {
                 <div className={styles.eyebrow}><span /> MÉRIDA, YUCATÁN</div>
                 <h1 id="hero-title" tabIndex={-1}>Cristian<br /><em>Medina</em></h1>
               </div>
-              <img className={styles.heroPortrait} src={portrait} alt="Cristian Medina en pixel art" width={1254} height={1254} />
+              <PixelPortrait />
             </div>
             <p className={styles.role} lang="en">Software Developer <span aria-hidden="true">|</span> Backend &amp; Full Stack <span aria-hidden="true">|</span> Solutions Engineering</p>
             <p className={styles.description}>
