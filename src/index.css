@@ -33,7 +33,10 @@
 
 * { box-sizing: border-box; }
 
-html { scroll-padding-block-start: var(--site-scroll-start); }
+html {
+  scroll-padding-block-start: var(--site-scroll-start);
+  scroll-padding-block-end: .75rem;
+}
 
 body { min-height: 100vh; margin: 0; background: var(--ivory); }
 

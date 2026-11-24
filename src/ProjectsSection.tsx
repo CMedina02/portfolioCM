@@ -1,69 +1,65 @@
 import { useRef, useState, type MouseEvent } from 'react'
 import { projects, type Project } from './data/projects'
+import kanbanCapture from './assets/kanbanproject-captura.jpg'
 import mapteRoute from './assets/mapte-route.webp'
+import pizzeriaCapture from './assets/pizzeria-paco-captura.png'
+import productionCapture from './assets/produccion-merma-captura.jpg'
 import styles from './ProjectsSection.module.css'
 
-const boardColumns = [
-  { name: 'Pendiente', tasks: ['Definir alcance', 'Revisar requisitos'] },
-  { name: 'En curso', tasks: ['Diseñar la API', 'Preparar pruebas'] },
-  { name: 'Listo', tasks: ['Crear tablero'] },
-]
+type Capture = {
+  src: string
+  width: number
+  height: number
+  alt: string
+  caption?: string
+}
+
+const captures: Partial<Record<string, Capture>> = {
+  mapte: {
+    src: mapteRoute,
+    width: 1867,
+    height: 961,
+    alt: 'MAPTE muestra una ruta sobre el terreno de Marte con paradas, tiempo estimado y oxígeno restante.',
+    caption: 'Captura de MAPTE · Ruta simulada en Marte',
+  },
+  kanbanproject: {
+    src: kanbanCapture,
+    width: 1600,
+    height: 900,
+    alt: 'Tablero Kanban con cuatro columnas, tarjetas de tareas, prioridades, tiempos y métricas de ejemplo.',
+  },
+  'pizzeria-paco': {
+    src: pizzeriaCapture,
+    width: 1280,
+    height: 753,
+    alt: 'Mostrador de Pizzería Paco con el catálogo de pizzas y una orden de ejemplo de 224 pesos.',
+  },
+  'produccion-merma': {
+    src: productionCapture,
+    width: 1425,
+    height: 1342,
+    alt: 'Calculadora de Producción Merma con la ficha de un suaje de ejemplo y un resultado de 92.45 metros lineales.',
+  },
+}
 
 export type OpenProject = (project: Project, trigger: HTMLButtonElement) => void
 
-export function ProjectMedia({ project }: { project: Project }) {
-  if (project.id === 'mapte') {
-    return (
-      <figure className={styles.routeCapture}>
-        <div className={styles.captureMedia}>
-          <img src={mapteRoute} width={1867} height={961} loading="lazy" decoding="async"
-            alt="MAPTE muestra una ruta sobre el terreno de Marte con paradas, tiempo estimado y oxígeno restante." />
-          <a href={mapteRoute} target="_blank" rel="noreferrer">
-            Ampliar captura <span aria-hidden="true">↗</span>
-          </a>
-        </div>
-        <figcaption>Captura de MAPTE · Ruta simulada en Marte</figcaption>
-      </figure>
-    )
-  }
-
-  const visual = project.id === 'kanbanproject' ? (
-    <div className={styles.boardArtwork} aria-hidden="true">
-      {boardColumns.map(({ name, tasks }) => (
-        <div className={styles.boardColumn} key={name}>
-          <b>{name}</b>
-          {tasks.map(task => <span key={task}>{task}</span>)}
-        </div>
-      ))}
-    </div>
-  ) : project.id === 'pizzeria-paco' ? (
-    <div className={styles.posArtwork} aria-hidden="true">
-      <div className={styles.posMain}>
-        <b>Catálogo</b>
-        <span>Margarita</span>
-        <span>Pepperoni</span>
-        <span>Vegetariana</span>
-      </div>
-      <div className={styles.posSummary}>
-        <b>Pedido</b>
-        <span>1 × Margarita</span>
-        <span>2 × Pepperoni</span>
-        <strong>Cobrar →</strong>
-      </div>
-    </div>
-  ) : (
-    <div className={styles.productionArtwork} aria-hidden="true">
-      <b>Plan de producción</b>
-      <span>Material base<strong>100 kg</strong></span>
-      <span>Merma prevista<strong>5 %</strong></span>
-      <span>Material requerido<strong>105 kg</strong></span>
-    </div>
-  )
+export function ProjectMedia({ project, preview = false }: { project: Project; preview?: boolean }) {
+  const capture = captures[project.id]
+  if (!capture) return null
 
   return (
-    <div className={styles.projectMedia} data-project={project.id} role="img" aria-label={`Ilustración editorial de ${project.name}`}>
-      <div className={styles.artwork}>{visual}</div>
-    </div>
+    <figure className={styles.projectCapture} data-project={project.id}>
+      <div className={styles.captureMedia} data-preview={preview || undefined}>
+        <img src={capture.src} width={capture.width} height={capture.height} alt={capture.alt} loading="lazy" decoding="async" />
+      </div>
+      <figcaption>
+        {capture.caption && <span>{capture.caption}</span>}
+        <a href={capture.src} target="_blank" rel="noreferrer" aria-label={`Ampliar captura de ${project.name}`}>
+          Ampliar captura <span aria-hidden="true">↗</span>
+        </a>
+      </figcaption>
+    </figure>
   )
 }
 
@@ -115,7 +111,7 @@ function ProjectCard({ project, onOpen }: { project: Project; onOpen: OpenProjec
         <h3 id={`project-${project.id}`}>{project.name}</h3>
         <p className={styles.projectDescription}>{project.description}</p>
       </header>
-      <ProjectMedia project={project} />
+      <ProjectMedia project={project} preview={!project.featured} />
       <div className={styles.projectContent}>
         <ProjectDetails project={project} onOpen={onOpen} />
       </div>

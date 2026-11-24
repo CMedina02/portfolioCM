@@ -3,7 +3,6 @@ import AboutSection from './AboutSection'
 import ContactSection from './ContactSection'
 import CurrentlySection from './CurrentlySection'
 import ExtrasSection from './ExtrasSection'
-import PortfolioFooter from './PortfolioFooter'
 import ProjectDialog, { type ProjectDialogHandle } from './ProjectDialog'
 import ProjectsSection, { type OpenProject } from './ProjectsSection'
 import SkillsSection from './SkillsSection'
@@ -17,6 +16,35 @@ function scrollProgress(position: number, start: number, end: number) {
 
 function getSectionHeading(target: HTMLElement) {
   return target.matches('h1, h2') ? target : target.querySelector<HTMLElement>('h1, h2')
+}
+
+function getViewportBounds() {
+  const root = document.documentElement
+  const { scrollPaddingBlockStart, scrollPaddingBlockEnd } = getComputedStyle(root)
+  return {
+    top: parseFloat(scrollPaddingBlockStart),
+    bottom: root.clientHeight - parseFloat(scrollPaddingBlockEnd),
+  }
+}
+
+function alignSection(target: HTMLElement) {
+  const { top, bottom } = getViewportBounds()
+  const rect = target.getBoundingClientRect()
+  let contentTop = rect.top
+  let contentBottom = rect.bottom
+
+  if (target.matches('section:not(#home, #contact)')) {
+    const { paddingBlockStart, paddingBlockEnd } = getComputedStyle(target)
+    contentTop += parseFloat(paddingBlockStart)
+    contentBottom -= parseFloat(paddingBlockEnd)
+  }
+
+  const availableSpace = bottom - top
+  const contentHeight = contentBottom - contentTop
+  const inset = target.matches('section')
+    ? Math.max(0, (availableSpace - contentHeight) / 2)
+    : 0
+  window.scrollTo({ top: window.scrollY + contentTop - top - inset, behavior: 'instant' })
 }
 
 function App() {
@@ -33,8 +61,17 @@ function App() {
     if (!header) return
 
     const root = document.documentElement
-    const update = () => root.style.setProperty('--site-header-height', `${header.getBoundingClientRect().height}px`)
-    const resize = new ResizeObserver(update)
+    let resizeFrame = 0
+    const update = () => {
+      const height = `${header.getBoundingClientRect().height}px`
+      if (root.style.getPropertyValue('--site-header-height') !== height) {
+        root.style.setProperty('--site-header-height', height)
+      }
+    }
+    const resize = new ResizeObserver(() => {
+      cancelAnimationFrame(resizeFrame)
+      resizeFrame = requestAnimationFrame(update)
+    })
     update()
     resize.observe(header)
 
@@ -44,7 +81,7 @@ function App() {
       frame = requestAnimationFrame(() => {
         const target = document.getElementById(window.location.hash.slice(1))
         if (!target) return
-        target.scrollIntoView({ block: 'start', behavior: 'instant' })
+        alignSection(target)
         if (event) getSectionHeading(target)?.focus({ preventScroll: true })
       })
     }
@@ -52,6 +89,7 @@ function App() {
     window.addEventListener('hashchange', alignFragment)
     return () => {
       resize.disconnect()
+      cancelAnimationFrame(resizeFrame)
       cancelAnimationFrame(frame)
       window.removeEventListener('hashchange', alignFragment)
       root.style.removeProperty('--site-header-height')
@@ -80,22 +118,19 @@ function App() {
   useEffect(() => {
     const root = document.documentElement
     const sections = Array.from(document.querySelectorAll<HTMLElement>('main section[id]'))
-    const stops = sections.map(section => ({
-      id: section.id,
-      start: section.matches('#home, #contact') ? section : section.firstElementChild ?? section,
-    }))
     const gallery = galleryRef.current
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
     let frame = 0
     let previousSection = ''
     const update = () => {
       frame = 0
-      const distance = root.scrollHeight - window.innerHeight
+      const distance = root.scrollHeight - root.clientHeight
       const atBottom = distance > 0 && window.scrollY >= distance - 1
-      const marker = parseFloat(getComputedStyle(root).scrollPaddingBlockStart) + 2
+      const { top, bottom } = getViewportBounds()
+      const marker = (top + bottom) / 2
       const current = atBottom
-        ? stops.at(-1)
-        : stops.findLast(stop => stop.start.getBoundingClientRect().top <= marker)
+        ? sections.at(-1)
+        : sections.findLast(section => section.getBoundingClientRect().top <= marker)
       const id = current?.id ?? 'home'
       if (!reducedMotion.matches && gallery) {
         const height = window.innerHeight
@@ -138,16 +173,20 @@ function App() {
     if (!link) return
 
     const target = document.getElementById(link.hash.slice(1))
-    const heading = target && getSectionHeading(target)
+    if (!target) return
+
+    event.preventDefault()
+    if (window.location.hash !== link.hash) window.history.pushState(null, '', link.hash)
     closeMenu()
-    window.requestAnimationFrame(() => heading?.focus({ preventScroll: true }))
+    alignSection(target)
+    getSectionHeading(target)?.focus({ preventScroll: true })
   }
 
   return (
     <div className={styles.siteShell} onClick={handleSectionNavigation}>
       <a className={styles.skipLink} href="#hero-title">Saltar al contenido principal</a>
       <header className={styles.topHeader} ref={headerRef} onKeyDown={handleMenuKeyDown}>
-        <a className={styles.logo} href="#home" aria-label="Cristian Medina, inicio">cristian<span>.dev</span></a>
+        <a className={styles.logo} href="#home" aria-label="Cristian Medina, inicio">Medina<span>.dev</span></a>
         <button className={styles.menuButton} type="button" ref={menuButtonRef} aria-expanded={menuOpen} aria-controls="main-navigation" onClick={() => setMenuOpen((open) => !open)}>
           <span>{menuOpen ? 'Cerrar' : 'Menú'}</span>
           <span className={menuOpen ? styles.menuIconOpen : styles.menuIcon} aria-hidden="true"><i /><i /></span>
@@ -156,13 +195,11 @@ function App() {
           {[
             ['home', 'Inicio'], ['projects', 'Proyectos'],
             ['about', 'Sobre mí'], ['extras', 'Extras'], ['skills', 'Tecnologías'],
-            ['currently', 'Actualmente'],
+            ['currently', 'Actualmente'], ['contact', 'Contacto'],
           ].map(([id, label]) => (
             <a key={id} href={`#${id}`} aria-current={activeSection === id ? 'location' : undefined}>{label}</a>
           ))}
-          <a className={styles.mobileContact} href="#contact" aria-current={activeSection === 'contact' ? 'location' : undefined}>Contacto</a>
         </nav>
-        <a className={styles.contactAction} href="#contact" aria-current={activeSection === 'contact' ? 'location' : undefined}>Contacto <span aria-hidden="true">↗</span></a>
       </header>
       <main className={styles.main} id="main-content">
         <section className={styles.hero} id="home" aria-labelledby="hero-title">
@@ -180,9 +217,6 @@ function App() {
             </p>
             <div className={styles.actions}>
               <a className={styles.primaryLink} href="#projects">Explorar proyectos <span aria-hidden="true">↓</span></a>
-              <a className={styles.github} href="https://github.com/CMedina02" target="_blank" rel="noreferrer">
-                <span>GitHub</span><span className={styles.arrow} aria-hidden="true">↗</span>
-              </a>
             </div>
           </div>
         </section>
@@ -194,7 +228,6 @@ function App() {
         <div data-reveal><CurrentlySection /></div>
         <div className={styles.closing}>
           <ContactSection />
-          <PortfolioFooter />
         </div>
       </main>
       <ProjectDialog ref={projectDialogRef} />
