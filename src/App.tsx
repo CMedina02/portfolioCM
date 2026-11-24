@@ -196,7 +196,7 @@ function App() {
               </div>
               <img className={styles.heroPortrait} src={portrait} alt="Cristian Medina en pixel art" width={1254} height={1254} />
             </div>
-            <p className={styles.role}>Software Developer <span aria-hidden="true">|</span> Backend &amp; Full Stack <span aria-hidden="true">·</span> Ingeniería de soluciones</p>
+            <p className={styles.role} lang="en">Software Developer <span aria-hidden="true">|</span> Backend &amp; Full Stack <span aria-hidden="true">|</span> Solutions Engineering</p>
             <p className={styles.description}>
               Diseño APIs y desarrollo aplicaciones web y de escritorio para gestionar tareas, pedidos e inventario.
             </p>
