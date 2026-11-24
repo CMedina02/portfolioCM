@@ -9,11 +9,6 @@ import SkillsSection from './SkillsSection'
 import portrait from './assets/cristian-pixel-art-transparente.webp'
 import styles from './App.module.css'
 
-function scrollProgress(position: number, start: number, end: number) {
-  const progress = Math.max(0, Math.min(1, (start - position) / (start - end)))
-  return progress * progress * (3 - 2 * progress)
-}
-
 function getSectionHeading(target: HTMLElement) {
   return target.matches('h1, h2') ? target : target.querySelector<HTMLElement>('h1, h2')
 }
@@ -52,7 +47,6 @@ function App() {
   const [activeSection, setActiveSection] = useState('home')
   const menuButtonRef = useRef<HTMLButtonElement>(null)
   const headerRef = useRef<HTMLElement>(null)
-  const galleryRef = useRef<HTMLDivElement>(null)
   const projectDialogRef = useRef<ProjectDialogHandle>(null)
   const openProject: OpenProject = (project, trigger) => projectDialogRef.current?.open(project, trigger)
 
@@ -118,8 +112,6 @@ function App() {
   useEffect(() => {
     const root = document.documentElement
     const sections = Array.from(document.querySelectorAll<HTMLElement>('main section[id]'))
-    const gallery = galleryRef.current
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
     let frame = 0
     let previousSection = ''
     const update = () => {
@@ -132,11 +124,6 @@ function App() {
         ? sections.at(-1)
         : sections.findLast(section => section.getBoundingClientRect().top <= marker)
       const id = current?.id ?? 'home'
-      if (!reducedMotion.matches && gallery) {
-        const height = window.innerHeight
-        const arrival = scrollProgress(gallery.getBoundingClientRect().top, height * .96, height * .48)
-        gallery.style.setProperty('--arrival', String(arrival))
-      }
       if (id !== previousSection) {
         previousSection = id
         setActiveSection(id)
@@ -149,12 +136,10 @@ function App() {
     resize.observe(document.body)
     window.addEventListener('scroll', schedule, { passive: true })
     window.addEventListener('resize', schedule)
-    reducedMotion.addEventListener('change', schedule)
     update()
     return () => {
       window.removeEventListener('scroll', schedule)
       window.removeEventListener('resize', schedule)
-      reducedMotion.removeEventListener('change', schedule)
       resize.disconnect()
       cancelAnimationFrame(frame)
     }
@@ -211,7 +196,7 @@ function App() {
               </div>
               <img className={styles.heroPortrait} src={portrait} alt="Cristian Medina en pixel art" width={1254} height={1254} />
             </div>
-            <p className={styles.role}>Software Developer <span>|</span> Backend &amp; Full Stack</p>
+            <p className={styles.role}>Software Developer <span aria-hidden="true">|</span> Backend &amp; Full Stack <span aria-hidden="true">·</span> Ingeniería de soluciones</p>
             <p className={styles.description}>
               Diseño APIs y desarrollo aplicaciones web y de escritorio para gestionar tareas, pedidos e inventario.
             </p>
@@ -221,14 +206,12 @@ function App() {
           </div>
         </section>
 
-        <div data-reveal className={styles.galleryArrival} ref={galleryRef}><ProjectsSection onOpen={openProject} /></div>
-        <div data-reveal><AboutSection /></div>
-        <div data-reveal><ExtrasSection /></div>
-        <div data-reveal><SkillsSection /></div>
-        <div data-reveal><CurrentlySection /></div>
-        <div className={styles.closing}>
-          <ContactSection />
-        </div>
+        <ProjectsSection onOpen={openProject} />
+        <AboutSection />
+        <ExtrasSection />
+        <SkillsSection />
+        <CurrentlySection />
+        <ContactSection />
       </main>
       <ProjectDialog ref={projectDialogRef} />
     </div>

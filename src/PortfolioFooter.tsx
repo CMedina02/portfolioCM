@@ -5,7 +5,7 @@ function PortfolioFooter() {
     <footer className={styles.footer}>
       <div>
         <span className={styles.name}>Cristian Medina</span>
-        <span className={styles.role}>Software Developer | Backend &amp; Full Stack</span>
+        <span className={styles.role}>Software Developer | Backend &amp; Full Stack · Ingeniería de soluciones</span>
       </div>
       <p lang="en">Always learning. Always building.</p>
       <a className={styles.topLink} href="#home">Volver arriba <span aria-hidden="true">↑</span></a>
