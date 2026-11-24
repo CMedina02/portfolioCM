@@ -2,7 +2,6 @@ export type Technology = {
   name: string
   icon?: string
   textMark?: string
-  featured?: boolean
 }
 
 export type TechnologyCategory = {
@@ -17,8 +16,8 @@ export const technologyCategories: TechnologyCategory[] = [
     title: 'Backend',
     technologies: [
       { name: 'Flask', icon: 'flask' },
-      { name: 'FastAPI', icon: 'fastapi', featured: true },
-      { name: 'Node.js', icon: 'nodejs', featured: true },
+      { name: 'FastAPI', icon: 'fastapi' },
+      { name: 'Node.js', icon: 'nodejs' },
       { name: 'Express', icon: 'express' },
       { name: 'Spring Boot', icon: 'spring' },
       { name: 'APIs REST', textMark: 'REST' },

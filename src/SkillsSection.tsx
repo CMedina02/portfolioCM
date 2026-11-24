@@ -17,8 +17,8 @@ function SkillsSection() {
           <article className={styles.category} key={category.id} aria-labelledby={`category-${category.id}`}>
             <h3 id={`category-${category.id}`}>{category.title}</h3>
             <ul className={styles.technologyList}>
-              {category.technologies.map(({ name, icon, textMark, featured }) => (
-                <li className={styles.technology} key={name} data-featured={featured || undefined}>
+              {category.technologies.map(({ name, icon, textMark }) => (
+                <li className={styles.technology} key={name}>
                   {icon ? (
                     <img className={styles.icon} src={`${DEVICON_BASE}/${icon}/${icon}-original.svg`}
                       alt="" width="24" height="24" loading="lazy" decoding="async" />
